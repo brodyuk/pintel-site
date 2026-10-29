@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Pintel">
+  <!-- Map pin -->
+  <path d="M256 40C150 40 76 118 76 222c0 118 160 238 172 247a13 13 0 0 0 16 0c12-9 172-129 172-247C436 118 362 40 256 40Z" fill="#F5A524"/>
+  <!-- Pint glass: dark rim, amber beer, cream head -->
+  <path d="M168 118h176l-22 236a28 28 0 0 1-28 25h-76a28 28 0 0 1-28-25Z" fill="#14120F"/>
+  <path d="M190 186h132l-17 160a12 12 0 0 1-12 11h-74a12 12 0 0 1-12-11Z" fill="#F5A524"/>
+  <path d="M184 136c6-14 22-20 36-13 8-15 28-19 41-8 12-11 32-8 40 6 14-5 29 3 29 18l-3 37H187Z" fill="#F5EFE4"/>
+</svg>

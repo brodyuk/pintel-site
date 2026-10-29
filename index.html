@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pintel · Drink prices at pubs near you</title>
+<meta name="description" content="See what a pint costs before you walk in. Real drink prices and happy hours at pubs near you. Free.">
+<meta property="og:title" content="Pintel · Drink prices at pubs near you">
+<meta property="og:description" content="See what a pint costs before you walk in. Real drink prices and happy hours at pubs near you.">
+<meta property="og:image" content="icon.png">
+<meta name="theme-color" content="#14120F">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #14120F; --deep: #0E0D0B; --surface: #201D18; --line: #2E2A23; --line-strong: #3A352C;
+    --ink: #F5EFE4; --soft: #E6DCC8; --quiet: #A9A091; --accent: #F5A524; --on-accent: #1A1408;
+    --wash: #3A2C10; --good: #57C7A8;
+    --display: 'Bricolage Grotesque', system-ui, sans-serif; --body: 'DM Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 400 17px/1.6 var(--body); -webkit-font-smoothing: antialiased; }
+  a { color: var(--accent); }
+  img { display: block; max-width: 100%; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+  h1, h2, h3 { font-family: var(--display); line-height: 1.1; margin: 0; letter-spacing: -0.02em; }
+  h1 { font-size: clamp(40px, 7vw, 72px); font-weight: 800; }
+  h2 { font-size: clamp(30px, 4.5vw, 44px); font-weight: 800; }
+  h3 { font-size: 21px; font-weight: 600; }
+  p { margin: 0; }
+  .quiet { color: var(--quiet); }
+
+  header { position: sticky; top: 0; z-index: 10; background: rgba(20, 18, 15, .9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+  .nav { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 16px; }
+  .brand { display: flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; font: 800 24px var(--display); }
+  .brand img { width: 34px; height: 34px; }
+  .nav nav { display: flex; align-items: center; gap: 22px; }
+  .nav nav a:not(.btn) { color: var(--soft); text-decoration: none; font-weight: 500; }
+  .nav nav a:not(.btn):hover { color: var(--ink); }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 22px; border-radius: 999px;
+    background: var(--accent); color: var(--on-accent); font: 700 16px var(--body); text-decoration: none; border: 0; }
+  .btn:hover { filter: brightness(1.06); }
+  .btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line-strong); }
+  .nav .btn { min-height: 40px; padding: 0 16px; font-size: 15px; }
+
+  .hero { padding-top: 72px; padding-bottom: 56px; display: grid; grid-template-columns: 1.15fr .85fr; gap: 48px; align-items: center; }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero p.lead { font-size: 20px; color: var(--soft); margin: 22px 0 30px; max-width: 34ch; }
+  .ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+  .pill { display: inline-block; margin-bottom: 20px; padding: 6px 14px; border-radius: 999px; background: var(--wash); color: var(--accent); font-weight: 700; font-size: 14px; }
+
+  /* A pretend phone showing the app's core idea: cheapest pints near you. Illustrative, not live data. */
+  .phone { background: var(--deep); border: 1px solid var(--line-strong); border-radius: 36px; padding: 22px 18px; box-shadow: 0 30px 80px rgba(0,0,0,.45); max-width: 340px; margin-left: auto; }
+  .phone .title { font: 800 22px var(--display); margin: 4px 4px 14px; }
+  .row { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); margin-bottom: 10px; }
+  .row .rank { width: 30px; height: 30px; border-radius: 10px; background: var(--wash); color: var(--accent); display: grid; place-items: center; font-weight: 700; flex: none; }
+  .row .name { font-weight: 700; line-height: 1.2; }
+  .row .meta { font-size: 13px; color: var(--quiet); }
+  .row .price { margin-left: auto; font: 800 20px var(--display); color: var(--ink); }
+  .row.happy { border-color: #5A4416; }
+  .tag { display: inline-block; font-size: 11px; font-weight: 700; color: var(--good); }
+  .phone .note { font-size: 12px; color: var(--quiet); text-align: center; margin-top: 6px; }
+
+  section { padding: 72px 0; border-top: 1px solid var(--line); }
+  .head { max-width: 640px; margin-bottom: 36px; }
+  .head p { margin-top: 12px; color: var(--soft); font-size: 18px; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 24px; }
+  .card h3 { margin-bottom: 8px; }
+  .card p { color: var(--quiet); }
+  .ico { width: 44px; height: 44px; border-radius: 14px; background: var(--wash); display: grid; place-items: center; margin-bottom: 16px; }
+  .ico svg { width: 24px; height: 24px; stroke: var(--accent); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  .steps { counter-reset: s; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .steps .card::before { counter-increment: s; content: counter(s); display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%;
+    background: var(--accent); color: var(--on-accent); font-weight: 800; margin-bottom: 14px; }
+
+  .pubs { background: linear-gradient(180deg, var(--wash), var(--bg) 70%); }
+  .offer { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+  .price-card { background: var(--deep); border: 1px solid #5A4416; border-radius: 24px; padding: 28px; }
+  .price-card .big { font: 800 56px var(--display); color: var(--accent); line-height: 1; }
+  .price-card ul { margin: 18px 0 24px; padding: 0; list-style: none; }
+  .price-card li { padding: 8px 0 8px 30px; position: relative; color: var(--soft); border-bottom: 1px solid var(--line); }
+  .price-card li::before { content: "✓"; position: absolute; left: 4px; color: var(--good); font-weight: 700; }
+
+  details { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px 20px; margin-bottom: 10px; }
+  summary { cursor: pointer; font-weight: 700; font-size: 18px; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+  summary::after { content: "+"; color: var(--accent); font-size: 22px; line-height: 1; }
+  details[open] summary::after { content: "–"; }
+  details p { margin-top: 10px; color: var(--quiet); }
+
+  footer { border-top: 1px solid var(--line); padding: 36px 0 48px; color: var(--quiet); font-size: 14px; }
+  .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px; }
+
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: 1fr; padding-top: 48px; }
+    .phone { margin: 0 auto; }
+    .grid, .steps, .offer { grid-template-columns: 1fr; }
+    .nav nav a:not(.btn) { display: none; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top"><img src="logo.svg" alt="">Pintel</a>
+    <nav>
+      <a href="#how">How it works</a>
+      <a href="#pubs">For pubs</a>
+      <a href="#faq">FAQ</a>
+      <a class="btn" href="https://pintel.expo.app">Open Pintel</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <div>
+      <span class="pill">Free · Now in Medway</span>
+      <h1>Know the price <em>before</em> you get to the bar.</h1>
+      <p class="lead">Pintel shows what drinks cost at pubs near you, plus happy hours that are on right now. Find the cheapest pint within a short walk.</p>
+      <div class="ctas">
+        <a class="btn" href="https://pintel.expo.app">Open Pintel, it’s free</a>
+        <a class="btn ghost" href="#pubs">Run a pub?</a>
+      </div>
+    </div>
+    <div class="phone" aria-label="Example of the Pintel app">
+      <div class="title">Cheapest pints near you</div>
+      <div class="row"><span class="rank">1</span><div><div class="name">The Red Lion</div><div class="meta">Carling · 4 min walk</div></div><span class="price">£3.90</span></div>
+      <div class="row happy"><span class="rank">2</span><div><div class="name">The Crown</div><div class="meta"><span class="tag">HAPPY HOUR TILL 7PM</span> · 6 min</div></div><span class="price">£4.10</span></div>
+      <div class="row"><span class="rank">3</span><div><div class="name">The Golden Lion</div><div class="meta">Guinness · 9 min walk</div></div><span class="price">£4.60</span></div>
+      <p class="note">Example screen</p>
+    </div>
+  </div>
+
+  <section id="how">
+    <div class="wrap">
+      <div class="head">
+        <h2>Everything for a good night out</h2>
+        <p>Pints, halves, wine, spirits and soft drinks, all priced. Prices come from drinkers and pubs, and other drinkers confirm them.</p>
+      </div>
+      <div class="grid">
+        <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg></div>
+          <h3>Cheapest near you</h3><p>Pick your drink and see the three cheapest places within walking distance.</p></div>
+        <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+          <h3>Happy hour now</h3><p>A live map of the deals running right now, and when they finish.</p></div>
+        <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h3"/></svg></div>
+          <h3>Round calculator</h3><p>Add everyone’s order and know the total before you get to the bar.</p></div>
+        <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M4 19c3-6 5-6 8-3s5 3 8-3"/><circle cx="4" cy="19" r="1.5"/><circle cx="20" cy="13" r="1.5"/></svg></div>
+          <h3>Pub crawl planner</h3><p>Plan a route, collect stamps along the way and share it with the group.</p></div>
+        <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M3 12l9-8 9 8"/><path d="M5 10v10h14V10"/></svg></div>
+          <h3>Get home safe</h3><p>The nearest bus stop, station and taxi rank when the night’s over.</p></div>
+        <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></div>
+          <h3>Snap the menu</h3><p>Take a photo of a price list and Pintel reads every price. Earn points as others confirm them.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pubs" class="pubs">
+    <div class="wrap offer">
+      <div>
+        <span class="pill">For pubs and bars</span>
+        <h2>Put your prices in front of people deciding where to go</h2>
+        <p class="quiet" style="margin-top:14px;font-size:18px">Drinkers nearby use Pintel to choose where to go. Show them your real prices and happy hours, marked “From the pub”, with a Verified venue badge.</p>
+        <div class="steps" style="margin-top:28px;grid-template-columns:1fr">
+          <div class="card"><h3>Send us your drinks list</h3><p>Reply to our email with a photo of your menu or boards, or type it out. Add your happy hours too.</p></div>
+          <div class="card"><h3>We put it live</h3><p>Your prices show on the map. You can update them any time yourself, from photos or by typing.</p></div>
+          <div class="card"><h3>Drinkers find you</h3><p>Your happy hours appear on the “Happy hour now” map while they’re on.</p></div>
+        </div>
+      </div>
+      <div class="price-card">
+        <div class="quiet" style="font-weight:700">Founding venue offer</div>
+        <div class="big">6 months free</div>
+        <p class="quiet" style="margin-top:8px">Then £5 a month, only if you want to carry on.</p>
+        <ul>
+          <li>Your own price list, marked “From the pub”</li>
+          <li>Happy hours and deals on the live map</li>
+          <li>Verified venue badge</li>
+          <li>Tonight’s sport on your listing</li>
+          <li>No card, no contract, nothing to cancel</li>
+        </ul>
+        <a class="btn" style="width:100%" id="pub-cta" href="https://pintel.expo.app">Find your pub in Pintel</a>
+        <p class="quiet" style="font-size:14px;margin-top:12px" id="pub-note">Open your pub’s page and tap “Is this your pub?”.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="wrap" style="max-width:760px">
+      <div class="head"><h2>Questions</h2></div>
+      <details><summary>Is Pintel free?</summary><p>Yes, free for drinkers. Pubs get 6 months of free advertising, then pay £5 a month only if they want to carry on.</p></details>
+      <details><summary>Where does it work?</summary><p>We’re starting in Medway. Pubs elsewhere in the UK are on the map too, and prices fill in as people add them.</p></details>
+      <details><summary>Where do the prices come from?</summary><p>From drinkers who add them at the pub, from menu photos, and from pubs themselves. Other drinkers confirm prices, and anything out of date is marked.</p></details>
+      <details><summary>Is it on iPhone?</summary><p>Open <a href="https://pintel.expo.app">pintel.expo.app</a> in Safari and it works like an app. The App Store and Google Play versions are coming soon.</p></details>
+      <details><summary>I run a pub. How do I get listed?</summary><p>You probably already are. Open Pintel, find your pub, and tap “Is this your pub?”. If we’ve emailed you, just reply with a photo of your drinks menu.</p></details>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div>
+      <a class="brand" href="#top" style="font-size:20px"><img src="logo.svg" alt="" style="width:26px;height:26px">Pintel</a>
+      <p style="margin-top:10px">Pintel is for adults aged 18 and over. Please drink responsibly: <a href="https://www.drinkaware.co.uk">drinkaware.co.uk</a></p>
+    </div>
+    <div style="text-align:right">
+      <p id="contact"></p>
+      <p>Venue and map data © OpenStreetMap contributors</p>
+      <p>© 2026 Pintel</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Set once the Pintel mailbox exists; the pubs button and footer then point to it.
+  const CONTACT_EMAIL = '';
+  if (CONTACT_EMAIL) {
+    document.getElementById('contact').innerHTML = `<a href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a>`;
+    const cta = document.getElementById('pub-cta');
+    cta.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Add my pub to Pintel')}`;
+    cta.textContent = 'Email us your drinks list';
+    document.getElementById('pub-note').textContent = 'Or find your pub in Pintel and tap “Is this your pub?”.';
+  }
+</script>
+</body>
+</html>
