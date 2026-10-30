@@ -7,7 +7,7 @@
 <meta name="description" content="See what a pint costs before you walk in. Real drink prices and happy hours at pubs near you. Free.">
 <meta property="og:title" content="Pintel · Drink prices at pubs near you">
 <meta property="og:description" content="See what a pint costs before you walk in. Real drink prices and happy hours at pubs near you.">
-<meta property="og:image" content="icon.png">
+<meta property="og:image" content="https://getpintel.com/icon.png">
 <meta name="theme-color" content="#14120F">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -218,7 +218,7 @@
 
 <script>
   // Set once the Pintel mailbox exists; the pubs button and footer then point to it.
-  const CONTACT_EMAIL = '';
+  const CONTACT_EMAIL = 'hello@getpintel.com';
   if (CONTACT_EMAIL) {
     document.getElementById('contact').innerHTML = `<a href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a>`;
     const cta = document.getElementById('pub-cta');
